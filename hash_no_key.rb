@@ -5,15 +5,15 @@ h = { :a => 1, :b => 2}
 
 h1 = {:a => 1, :c=> nil}
 
-print h[:c] #=>当key没有时， 返回nil
+p h[:c] #=>当key没有时， 返回nil
 
-print h1[:c] #=> 当key的值为nil时... 
+p h1[:c] #=> 当key的值为nil时, 返回nil 
 
 
 
 def func **a
-  print a
-  print "enter without param a"
+  p a #=> {} 空hash
+  p "enter without param a"
 end
 
 
