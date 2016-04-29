@@ -11,7 +11,7 @@ module M1
 end
 
 class C1
-  include M1 
+#  include M1 
 
   def self.c1_class_func1
     M1::m1_class_func #=> 必须加域名M1, 此处既不是include扩展也不是extend扩展，而是跨域模块调用！
@@ -20,6 +20,7 @@ class C1
 
   class << self
     def c1_class_func2
+	     M1::m1_class_func
       p "In c1_class_func2, self is #{self}, ancestors is #{self.ancestors}"	    
     end
   end
@@ -47,6 +48,7 @@ end
 
 class C2
  extend M2  #扩展成类方法  
+ p  self.ancestors
  def self.c2_class_func1
    self.m2_class_func
    p "In c2_class_func1, self is #{self}, ancestors is #{self.ancestors}" #=> "In m2_class_func, self is C2, ancestors is [C2, Object, Kernel, BasicObject]" 用extend 说明M2不会出现在C2的继承树上!
@@ -82,15 +84,17 @@ class C3
  include M3
 
  def self.c3_class_func1
-	 p "In c3_class_func1, #{CT},#{self::CT} , #{self.const_defined?(:CT)}, #{self.instance_variables}"
+	 p "In c3_class_func1, #{CT},#{self::CT} , #{self.const_defined?(:CT)}, #{self.instance_variables}, ancestors is #{self.ancestors} "
 	 #p "In c3_class_func1, #{self.CT}, #{self.variables}, #{self.instance_variables}" #class_self.rb:83:in `c3_class_func1': undefined method `CT' for C3:Class (NoMethodError)
          #注意常量的访问方式，不能用调用方法的方式： self.CT (error)  self::CT (right)
  end
-
+ 
+ CT = "Not ok"
  class<<self
     def c3_class_func2
-	    p "In c3_class_func2, #{CT},#{self::CT} , #{self.const_defined?(:CT)}, #{self.instance_variables}" #=> class_self.rb:90:in `c3_class_func2': uninitialized constant Class::CT (NameError) why met the error here ?
-      
+	   p CG 
+	   # p "In c3_class_func2, #{CT},#{self::CT} , #{self.const_defined?(:CT)}, #{self.instance_variables}, ancestors is #{self.ancestors}" #=> class_self.rb:90:in `c3_class_func2': uninitialized constant Class::CT (NameError) why met the error here ?
+	    p "In c3_class_func2,#{self::CT}, #{self.const_defined?(:CT)}, #{self.instance_variables}, ancestors is #{self.ancestors}, #{self.singleton_class}, #{self.singleton_methods}"
 
     end
  end
